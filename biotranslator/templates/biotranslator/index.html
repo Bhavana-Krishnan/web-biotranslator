@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioTranslator | DNA Analysis</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --dark-gray: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #eef2f3;
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.95rem;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .navbar-links a:hover {
+            text-decoration: underline;
+        }
+
+        .welcome-msg {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            background-color: var(--secondary);
+            color: var(--white) !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #219150;
+            text-decoration: none !important;
+        }
+
+        /* Main Content Grid Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 1.2rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #219150;
+        }
+
+        .results {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f1f1f1;
+        }
+
+        .result-box {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            word-break: break-all;
+            font-family: 'Courier New', Courier, monospace;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--dark-gray);
+            margin-bottom: 0.3rem;
+            display: block;
+            font-family: sans-serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'DNA' %}" class="navbar-brand">BioTranslator</a>
+        <div class="navbar-links">
+            {% if user.is_authenticated %}
+                <span class="welcome-msg">Welcome, {{ user.username }}!</span> | 
+                <a href="{% url 'history' %}">View History</a> | 
+                
+                <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            {% else %}
+                <span style="color: var(--dark-gray);">Guest Mode</span> | 
+                <a href="{% url 'login' %}" class="login-btn">Login</a>
+                <a href="{% url 'signup' %}" class="login-btn">Register</a> 
+            
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Analyze Sequence</h1>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.errors or form.non_field_errors %}
+    <div style="background-color: #fde8e8; color: #e74c3c; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #e74c3c; font-size: 0.95rem;">
+        <!-- Show global form errors -->
+        {% for error in form.non_field_errors %}
+            <div><strong>Error:</strong> {{ error }}</div>
+        {% endfor %}
+        
+        <!-- Show field-specific validation errors -->
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div><strong>{{ field.label }}:</strong> {{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+                <textarea name="dna_sequence" placeholder="Paste your raw DNA sequence string here..."></textarea>
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.3rem;">{{ form.file_upload.label }}</label>
+                    {{ form.file_upload }}
+                </div>
+                <button type="submit" class="submit-btn">Translate Sequence</button>
+            </form>
+
+            <div class="results">
+                <div class="result-box">
+                    <span class="result-label">RNA Output</span>
+                    <div id="rna_output">{% if rna %}{{ rna }}{% else %}&mdash;{% endif %}</div>
+                </div>
+                
+                <div class="result-box">
+                    <span class="result-label">Protein Chain</span>
+                    <div id="protein_output">{% if protein %}{{ protein }}{% else %}&mdash;{% endif %}</div>
+                </div>
+
+                <div class="result-box" style="border-left-color: #3498db;">
+                    <span class="result-label">GC Content</span>
+                    <div id="gc_output">{% if gc %}{{ gc }}%{% else %}&mdash;{% endif %}</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

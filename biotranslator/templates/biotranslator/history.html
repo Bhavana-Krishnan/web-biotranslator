@@ -1,0 +1,3 @@
+{% for item in history_items %}
+    <p>{{ item.dna_sequence }} -> {{ item.protein_sequence }} (GC: {{ item.gc_content }}%)</p>
+{% endfor %}

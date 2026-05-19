@@ -1,0 +1,8 @@
+<div class="container">
+    <h2>Login to BioTranslator</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        <button type="submit">Login</button>
+    </form>
+</div>
