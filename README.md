@@ -5,13 +5,12 @@ BioTranslator is a responsive, web-based bioinformatics application built with D
 The platform supports robust user session tracking, saving personal analysis histories for authenticated users while cleanly facilitating on-the-fly calculations for anonymous guests.
 
 ---
-
 ## Core Features
 
 * **Dual Input Pipelines:** Supports direct plain-text sequence pasting or text-based FASTA/FA file uploads.
-* **Automated Translation Pipeline:** Handles transcription ($\text{DNA} \rightarrow \text{RNA}$) and translation ($\text{RNA} \rightarrow \text{Protein}$) powered by Biopython.
-* **Intelligent Codon Slicing:** Automatically detects and trims trailing partial codons ($\text{length} \pmod 3 \neq 0$) before translation to avoid truncation warnings.
-* **Strict Sequence Validation:** Leverages Python set mathematics to sanitize inputs, stripping FASTA headers globally while filtering out non-nucleotide contaminants ($A, T, C, G, N$).
+* **Automated Translation Pipeline:** Handles transcription (DNA to RNA) and translation (RNA to Protein) powered by Biopython.
+* **Intelligent Codon Slicing:** Automatically detects and trims trailing partial codons (where length % 3 != 0) before translation to avoid truncation warnings.
+* **Strict Sequence Validation:** Leverages Python set mathematics to sanitize inputs, stripping FASTA headers globally while filtering out non-nucleotide contaminants (A, T, C, G, N).
 * **Stateful User Management:** Automatically maps saved records to logged-in user profiles while maintaining a seamless, zero-crash workflow for anonymous guests.
 * **Optimized UX Rendering:** Overrides standard Post/Redirect/Get (PRG) constraints to dynamically render multi-variable translation contexts directly back to the active screen view.
 
