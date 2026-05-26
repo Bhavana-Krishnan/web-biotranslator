@@ -1,4 +1,4 @@
-# # BioTranslator: DNA Analysis & Translation Platform
+# BioTranslator: DNA Analysis & Translation Platform
 
 BioTranslator is a responsive, web-based bioinformatics application built with Django and Biopython. It provides users and researchers with an automated pipeline to process raw DNA sequences—either through text input or FASTA file uploads—and instantly transcribes them into RNA, translates them into protein sequences, and calculates key structural metrics like GC content.
 
